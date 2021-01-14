@@ -20,8 +20,8 @@ pragma experimental ABIEncoderV2;
 import "@openzeppelin/contracts/token/ERC20/ERC20Burnable.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20Detailed.sol";
 
-contract TestnetUSDC is ERC20Detailed, ERC20Burnable {
-    constructor() public ERC20Detailed("USD//C", "USDC", 6) {}
+contract TestnetDAI is ERC20Detailed, ERC20Burnable {
+    constructor() public ERC20Detailed("Dai", "DAI", 18) {}
 
     function mint(address account, uint256 amount) external returns (bool) {
         _mint(account, amount);

@@ -25,8 +25,8 @@ contract Getters is State {
     using SafeMath for uint256;
     using Decimal for Decimal.D256;
 
-    bytes32
-        private constant IMPLEMENTATION_SLOT = 0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc;
+    bytes32 private constant IMPLEMENTATION_SLOT =
+        0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc;
 
     /**
      * ERC20 Interface
@@ -163,8 +163,8 @@ contract Getters is State {
     }
 
     function epochTime() public view returns (uint256) {
-        Constants.EpochStrategy memory current = Constants
-            .getCurrentEpochStrategy();
+        Constants.EpochStrategy memory current =
+            Constants.getCurrentEpochStrategy();
 
         return epochTimeWithStrategy(current);
     }
@@ -174,6 +174,10 @@ contract Getters is State {
         view
         returns (uint256)
     {
+        if (blockTimestamp() < strategy.start) {
+            return 0;
+        }
+
         return
             blockTimestamp().sub(strategy.start).div(strategy.period).add(
                 strategy.offset

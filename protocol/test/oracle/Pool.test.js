@@ -40,7 +40,7 @@ describe('Pool', function () {
       from: ownerAddress,
       gas: 8000000,
     })
-    this.usdc = await MockToken.new('Dai', 'DAI', 18, {
+    this.dai = await MockToken.new('Dai', 'DAI', 18, {
       from: ownerAddress,
       gas: 8000000,
     })
@@ -50,7 +50,7 @@ describe('Pool', function () {
     })
     this.pool = await MockPool.new(
       this.dollar.address,
-      this.usdc.address,
+      this.dai.address,
       this.univ2.address,
       {
         from: ownerAddress,
@@ -1330,8 +1330,8 @@ describe('Pool', function () {
         )
 
         beforeEach(async function () {
-          await this.usdc.mint(userAddress, 1000)
-          await this.usdc.approve(this.pool.address, 1000, {
+          await this.dai.mint(userAddress, 1000)
+          await this.dai.approve(this.pool.address, 1000, {
             from: userAddress,
           })
 
@@ -1415,8 +1415,8 @@ describe('Pool', function () {
         )
 
         beforeEach(async function () {
-          await this.usdc.mint(userAddress, 3000)
-          await this.usdc.approve(this.pool.address, 3000, {
+          await this.dai.mint(userAddress, 3000)
+          await this.dai.approve(this.pool.address, 3000, {
             from: userAddress,
           })
 

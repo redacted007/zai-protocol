@@ -24,13 +24,12 @@ library Constants {
     uint256 private constant CHAIN_ID = 1; // Mainnet
 
     /* Bootstrapping */
-    uint256 private constant BOOTSTRAPPING_PERIOD = 672; // 14 cycles
+    uint256 private constant BOOTSTRAPPING_PERIOD = 240; // 5 cycles
     uint256 private constant BOOTSTRAPPING_PRICE = 11e17; // 1.10 DAI
 
     /* Oracle */
-    address private constant USDC = address(
-        0x6B175474E89094C44Da98b954EedeAC495271d0F
-    ); // Anywhere the term USDC is refernenced, consider that as "peg", really
+    address private constant DAI_ADDRESS =
+        address(0x6B175474E89094C44Da98b954EedeAC495271d0F);
     uint256 private constant ORACLE_RESERVE_MINIMUM = 1e22; // 10,000 DAI
 
     /* Bonding */
@@ -44,7 +43,7 @@ library Constants {
     }
 
     uint256 private constant CURRENT_EPOCH_OFFSET = 0;
-    uint256 private constant CURRENT_EPOCH_START = 1608422400;
+    uint256 private constant CURRENT_EPOCH_START = 1611014400;
     uint256 private constant CURRENT_EPOCH_PERIOD = 1800;
 
     /* Governance */
@@ -73,16 +72,15 @@ library Constants {
     uint256 private constant TREASURY_RATIO = 0; // 0%
 
     /* Deployed */
-    address private constant TREASURY_ADDRESS = address(
-        0x0000000000000000000000000000000000000000
-    );
+    address private constant TREASURY_ADDRESS =
+        address(0x0000000000000000000000000000000000000000);
 
     /**
      * Getters
      */
 
-    function getUsdcAddress() internal pure returns (address) {
-        return USDC;
+    function getDaiAddress() internal pure returns (address) {
+        return DAI_ADDRESS;
     }
 
     function getOracleReserveMinimum() internal pure returns (uint256) {

@@ -15,15 +15,19 @@ pragma solidity ^0.5.17;
 pragma experimental ABIEncoderV2;
 
 import "../external/Decimal.sol";
-import "../token/Dollar.sol";
+import "../token/ZaiV2.sol";
 import "../oracle/Oracle.sol";
 import "../oracle/Pool.sol";
 import "./Upgradeable.sol";
 import "./Permission.sol";
 
 contract Deployer1 is State, Permission, Upgradeable {
+    // Original ZAI token address must be this on mainnet
+    address public constant OLD_ZAI_ADDRESS =
+        address(0x9d1233cc46795E94029fDA81aAaDc1455D510f15);
+
     function initialize() public initializer {
-        _state.provider.dollar = new Dollar();
+        _state.provider.dollar = new ZaiV2(OLD_ZAI_ADDRESS);
     }
 
     function implement(address implementation) external {

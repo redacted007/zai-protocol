@@ -30,9 +30,8 @@ contract Oracle is IOracle {
     using Decimal for Decimal.D256;
 
     bytes32 private constant FILE = "Oracle";
-    address private constant UNISWAP_FACTORY = address(
-        0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f
-    );
+    address private constant UNISWAP_FACTORY =
+        address(0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f);
 
     address internal _dao;
     address internal _dollar;
@@ -52,7 +51,7 @@ contract Oracle is IOracle {
 
     function setup() public onlyDao {
         _pair = IUniswapV2Pair(
-            IUniswapV2Factory(UNISWAP_FACTORY).createPair(_dollar, usdc())
+            IUniswapV2Factory(UNISWAP_FACTORY).createPair(_dollar, dai())
         );
 
         (address token0, address token1) = (_pair.token0(), _pair.token1());
@@ -83,11 +82,12 @@ contract Oracle is IOracle {
 
     function initializeOracle() private {
         IUniswapV2Pair pair = _pair;
-        uint256 priceCumulative = _index == 0
-            ? pair.price0CumulativeLast()
-            : pair.price1CumulativeLast();
-        (uint112 reserve0, uint112 reserve1, uint32 blockTimestampLast) = pair
-            .getReserves();
+        uint256 priceCumulative =
+            _index == 0
+                ? pair.price0CumulativeLast()
+                : pair.price1CumulativeLast();
+        (uint112 reserve0, uint112 reserve1, uint32 blockTimestampLast) =
+            pair.getReserves();
         if (reserve0 != 0 && reserve1 != 0 && blockTimestampLast != 0) {
             _cumulative = priceCumulative;
             _timestamp = blockTimestampLast;
@@ -118,18 +118,18 @@ contract Oracle is IOracle {
             uint32 blockTimestamp
         ) = UniswapV2OracleLibrary.currentCumulativePrices(address(_pair));
         uint32 timeElapsed = blockTimestamp - _timestamp; // overflow is desired
-        uint256 priceCumulative = _index == 0
-            ? price0Cumulative
-            : price1Cumulative;
-        Decimal.D256 memory price = Decimal.ratio(
-            (priceCumulative - _cumulative) / timeElapsed,
-            2**112
-        );
+        uint256 priceCumulative =
+            _index == 0 ? price0Cumulative : price1Cumulative;
+        Decimal.D256 memory price =
+            Decimal.ratio(
+                (priceCumulative - _cumulative) / timeElapsed,
+                2**112
+            );
 
         _timestamp = blockTimestamp;
         _cumulative = priceCumulative;
 
-        return price.mul(1e12);
+        return price;
     }
 
     function updateReserve() private returns (uint256) {
@@ -140,8 +140,8 @@ contract Oracle is IOracle {
         return lastReserve;
     }
 
-    function usdc() internal view returns (address) {
-        return Constants.getUsdcAddress();
+    function dai() internal view returns (address) {
+        return Constants.getDaiAddress();
     }
 
     function pair() external view returns (address) {
