@@ -6,8 +6,8 @@ Forked from, and inspired by [ESD](https://github.com/emptysetsquad/dollar).
 
 ## stablecoin
 
-- shorthand name: `zai`
-- full name: `Zero Collateral Dai`
+- shorthand name: `zai v2`
+- full name: `Zero Collateral Dai v2`
 - symbol: `ZAI`
 - decimals: `18`
 - character: `⊅ [U+2285], ⊅100`
