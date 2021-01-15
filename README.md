@@ -20,10 +20,10 @@ Forked from, and inspired by [ESD](https://github.com/emptysetsquad/dollar).
 
 ### mainnet
 
-- `0x9d1233cc46795e94029fda81aaadc1455d510f15` **Zai**
-- `0x6A2E6510B2BBF8C9AD7bC817D0Dc711711E8d747` **DAO (ZAIS)**
-- `0xf1a6bed23411d709069ddbd55a04700f9493476f` **LP Incentivation Pool**
-- `0x323E054A6Dd8762011d60993f51E23E2096B221f` **UniswapV2 DAI-ZAI Pair**
+- `0xe420bce9109365Eae3bA6EBf24E5045B72388025` **Zai**
+- `0xE2612091Ec3dBE6f40BbfD0f30e3b8E4eA896e53` **DAO (ZAIS)**
+- `0x326e906a28cd7ff56cce6a84a8043786b8762cdf` **LP Incentivation Pool**
+- `0x675A8fa1Cf8a9c3bf2C49Ff14fdCaA01B11dD842` **UniswapV2 DAI-ZAI Pair**
 - `0x33947FdD86703AF4eCd53DCd5805a82a24BD5A51` **Oracle**
 
 ## audit of forked codebase
