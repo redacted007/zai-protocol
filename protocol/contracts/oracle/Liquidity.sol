@@ -24,25 +24,25 @@ import "../Constants.sol";
 import "./PoolGetters.sol";
 
 contract Liquidity is PoolGetters {
-    address private constant UNISWAP_FACTORY = address(
-        0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f
-    );
+    address private constant UNISWAP_FACTORY =
+        address(0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f);
 
     function addLiquidity(uint256 dollarAmount)
         internal
         returns (uint256, uint256)
     {
-        (address dollar, address usdc) = (address(dollar()), usdc());
-        (uint256 reserveA, uint256 reserveB) = getReserves(dollar, usdc);
+        (address dollar, address dai) = (address(dollar()), dai());
+        (uint256 reserveA, uint256 reserveB) = getReserves(dollar, dai);
 
-        uint256 usdcAmount = (reserveA == 0 && reserveB == 0)
-            ? dollarAmount
-            : UniswapV2Library.quote(dollarAmount, reserveA, reserveB);
+        uint256 daiAmount =
+            (reserveA == 0 && reserveB == 0)
+                ? dollarAmount
+                : UniswapV2Library.quote(dollarAmount, reserveA, reserveB);
 
         address pair = address(univ2());
         IERC20(dollar).transfer(pair, dollarAmount);
-        IERC20(usdc).transferFrom(msg.sender, pair, usdcAmount);
-        return (usdcAmount, IUniswapV2Pair(pair).mint(address(this)));
+        IERC20(dai).transferFrom(msg.sender, pair, daiAmount);
+        return (daiAmount, IUniswapV2Pair(pair).mint(address(this)));
     }
 
     // overridable for testing
@@ -52,10 +52,11 @@ contract Liquidity is PoolGetters {
         returns (uint256 reserveA, uint256 reserveB)
     {
         (address token0, ) = UniswapV2Library.sortTokens(tokenA, tokenB);
-        (uint256 reserve0, uint256 reserve1, ) = IUniswapV2Pair(
-            UniswapV2Library.pairFor(UNISWAP_FACTORY, tokenA, tokenB)
-        )
-            .getReserves();
+        (uint256 reserve0, uint256 reserve1, ) =
+            IUniswapV2Pair(
+                UniswapV2Library.pairFor(UNISWAP_FACTORY, tokenA, tokenB)
+            )
+                .getReserves();
         (reserveA, reserveB) = tokenA == token0
             ? (reserve0, reserve1)
             : (reserve1, reserve0);

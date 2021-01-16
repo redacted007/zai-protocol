@@ -34,7 +34,7 @@ const permit = [
 
 async function signPermit(dollar, privateKey, message) {
   const domainData = {
-    name: 'Zero Collateral Dai',
+    name: 'Zero Collateral Dai: V2',
     version: '1',
     chainId: '1',
     verifyingContract: dollar,

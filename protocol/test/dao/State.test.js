@@ -5,8 +5,9 @@ const { expect } = require('chai')
 
 const MockState = contract.fromArtifact('MockState')
 
-const BOOTSTRAPPING_END_TIMESTAMP = 1609632000
-const EPOCH_START = 1608422400
+const BOOTSTRAPPING_END_EPOCH = 240
+const EPOCH_START = 1611014400
+const BOOTSTRAPPING_END_TIMESTAMP = EPOCH_START + BOOTSTRAPPING_END_EPOCH * 1800
 const EPOCH_OFFSET = 0
 
 describe('State', function () {
@@ -690,9 +691,54 @@ describe('State', function () {
     })
 
     describe('before start', function () {
-      it('is 672', async function () {
+      beforeEach('call', async function () {
+        await this.setters.setBlockTimestamp(EPOCH_START - 1)
+      })
+      it('is 0', async function () {
+        expect(await this.setters.epochTime()).to.be.bignumber.equal(new BN(0))
+      })
+    })
+
+    describe('at start', function () {
+      beforeEach('call', async function () {
+        await this.setters.setBlockTimestamp(EPOCH_START)
+      })
+      it('is 0', async function () {
+        expect(await this.setters.epochTime()).to.be.bignumber.equal(new BN(0))
+      })
+    })
+
+    describe('after start', function () {
+      beforeEach('call', async function () {
+        await this.setters.setBlockTimestamp(EPOCH_START + 1)
+      })
+      it('is 0', async function () {
+        expect(await this.setters.epochTime()).to.be.bignumber.equal(new BN(0))
+      })
+    })
+
+    describe('one epoch after', function () {
+      beforeEach('call', async function () {
+        await this.setters.setBlockTimestamp(EPOCH_START + 1800)
+      })
+      it('is 1', async function () {
+        expect(await this.setters.epochTime()).to.be.bignumber.equal(new BN(1))
+      })
+    })
+
+    describe('2 epoch after', function () {
+      beforeEach('call', async function () {
+        await this.setters.setBlockTimestamp(EPOCH_START + 3600)
+      })
+      it('is 1', async function () {
+        expect(await this.setters.epochTime()).to.be.bignumber.equal(new BN(2))
+      })
+    })
+
+    describe('before start', function () {
+      it('is', async function () {
         expect(await this.setters.epochTime()).to.be.bignumber.equal(
-          new BN(672),
+          new BN(BOOTSTRAPPING_END_EPOCH),
         )
       })
     })
@@ -704,7 +750,7 @@ describe('State', function () {
 
       it('has advanced', async function () {
         expect(await this.setters.epochTime()).to.be.bignumber.equal(
-          new BN(673),
+          new BN(BOOTSTRAPPING_END_EPOCH + 1),
         )
       })
     })
@@ -718,7 +764,7 @@ describe('State', function () {
 
       it('has advanced', async function () {
         expect(await this.setters.epochTime()).to.be.bignumber.equal(
-          new BN(682),
+          new BN(BOOTSTRAPPING_END_EPOCH + 10),
         )
       })
     })
@@ -732,7 +778,7 @@ describe('State', function () {
 
       it('has advanced', async function () {
         expect(await this.setters.epochTime()).to.be.bignumber.equal(
-          new BN(686),
+          new BN(BOOTSTRAPPING_END_EPOCH + 14),
         )
       })
     })
@@ -746,7 +792,7 @@ describe('State', function () {
 
       it('has advanced', async function () {
         expect(await this.setters.epochTime()).to.be.bignumber.equal(
-          new BN(686),
+          new BN(BOOTSTRAPPING_END_EPOCH + 14),
         )
       })
     })
@@ -760,7 +806,7 @@ describe('State', function () {
 
       it('has advanced', async function () {
         expect(await this.setters.epochTime()).to.be.bignumber.equal(
-          new BN(687),
+          new BN(BOOTSTRAPPING_END_EPOCH + 15),
         )
       })
     })
@@ -774,7 +820,7 @@ describe('State', function () {
 
       it('has advanced', async function () {
         expect(await this.setters.epochTime()).to.be.bignumber.equal(
-          new BN(688),
+          new BN(BOOTSTRAPPING_END_EPOCH + 16),
         )
       })
     })
@@ -788,7 +834,7 @@ describe('State', function () {
 
       it('has advanced', async function () {
         expect(await this.setters.epochTime()).to.be.bignumber.equal(
-          new BN(1552),
+          new BN(BOOTSTRAPPING_END_EPOCH + 880),
         )
       })
     })
@@ -954,13 +1000,17 @@ describe('State', function () {
       })
 
       it('is bootstrapping', async function () {
-        expect(await this.setters.bootstrappingAt(672)).to.be.equal(true)
+        expect(
+          await this.setters.bootstrappingAt(BOOTSTRAPPING_END_EPOCH),
+        ).to.be.equal(true)
       })
     })
 
     describe('bootstrapped', function () {
       it('isnt bootstrapping', async function () {
-        expect(await this.setters.bootstrappingAt(673)).to.be.equal(false)
+        expect(
+          await this.setters.bootstrappingAt(BOOTSTRAPPING_END_EPOCH + 1),
+        ).to.be.equal(false)
       })
     })
   })

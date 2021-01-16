@@ -32,7 +32,7 @@ contract Dollar is
 {
     constructor()
         public
-        ERC20Detailed("Zero Collateral Dai", "ZAI", 18)
+        ERC20Detailed("Zero Collateral Dai: V2", "ZAIv2", 18)
         Permittable()
     {}
 

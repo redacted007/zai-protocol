@@ -3,11 +3,6 @@ const Deployer2 = artifacts.require('Deployer2')
 const Deployer3 = artifacts.require('Deployer3')
 const Implementation = artifacts.require('Implementation')
 const Root = artifacts.require('Root')
-const TestnetUSDC = artifacts.require('TestnetUSDC')
-
-async function deployTestnetUSDC(deployer) {
-  await deployer.deploy(TestnetUSDC)
-}
 
 async function deployTestnet(deployer) {
   const d1 = await deployer.deploy(Deployer1)

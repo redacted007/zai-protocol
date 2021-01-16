@@ -13,15 +13,15 @@ const MockOracle = contract.fromArtifact('MockOracle')
 const MockUniswapV2PairTrade = contract.fromArtifact('MockUniswapV2PairTrade')
 const MockDAI = contract.fromArtifact('MockToken')
 
-const DECIMAL_DIFF = new BN(10).pow(new BN(12))
+const DECIMAL_DIFF = new BN(10).pow(new BN(0))
 const EPSILON = new BN(1).mul(DECIMAL_DIFF)
 
 function cents(n) {
   return new BN(n).mul(new BN(10).pow(new BN(16)))
 }
 
-function usdc(n) {
-  return new BN(n).mul(new BN(10).pow(new BN(6)))
+function dai(n) {
+  return new BN(n).mul(new BN(10).pow(new BN(18)))
 }
 
 function uint112s(time, priceNum = 1, priceDen = 1) {
@@ -39,7 +39,7 @@ async function priceForToBN(oracle) {
 async function simulateTrade(amm, zai, dai) {
   return await amm.simulateTrade(
     new BN(zai).mul(new BN(10).pow(new BN(18))),
-    new BN(dai).mul(new BN(10).pow(new BN(6))),
+    new BN(dai).mul(new BN(10).pow(new BN(18))),
   )
 }
 
@@ -48,12 +48,12 @@ describe('Oracle', function () {
 
   beforeEach(async function () {
     this.dollar = await Dollar.new({ from: ownerAddress })
-    this.usdc = await MockDAI.new('Dai', 'DAI', 18, { from: ownerAddress })
+    this.dai = await MockDAI.new('Dai', 'DAI', 18, { from: ownerAddress })
     this.amm = await MockUniswapV2PairTrade.new({ from: ownerAddress })
     this.oracle = await MockOracle.new(
       this.amm.address,
       this.dollar.address,
-      this.usdc.address,
+      this.dai.address,
       { from: ownerAddress, gas: 8000000 },
     )
     await time.increase(3600)
@@ -118,7 +118,7 @@ describe('Oracle', function () {
               this.timestamp,
             )
             expect(await this.oracle.reserve()).to.be.bignumber.equal(
-              usdc(1000000),
+              dai(1000000),
             )
           })
         })
@@ -143,7 +143,7 @@ describe('Oracle', function () {
               this.timestamp,
             )
             expect(await this.oracle.reserve()).to.be.bignumber.equal(
-              usdc(1000000),
+              dai(1000000),
             )
           })
         })
@@ -169,7 +169,7 @@ describe('Oracle', function () {
               this.timestamp,
             )
             expect(await this.oracle.reserve()).to.be.bignumber.equal(
-              usdc(1000000),
+              dai(1000000),
             )
           })
         })
@@ -194,7 +194,7 @@ describe('Oracle', function () {
               this.timestamp,
             )
             expect(await this.oracle.reserve()).to.be.bignumber.equal(
-              usdc(1000000),
+              dai(1000000),
             )
           })
         })
@@ -205,7 +205,7 @@ describe('Oracle', function () {
       describe('price of 1', function () {
         describe('same block', function () {
           beforeEach(async function () {
-            await simulateTrade(this.amm, 1000000, 1000000)
+            await simulateTrade(this.amm, 1_000_000, 1_000_000)
             this.initialized = await time.latest()
             await this.oracle.capture({ from: ownerAddress })
             await time.increase(86400)
@@ -227,7 +227,7 @@ describe('Oracle', function () {
               this.timestamp,
             )
             expect(await this.oracle.reserve()).to.be.bignumber.equal(
-              usdc(1000000),
+              dai(1000000),
             )
           })
         })
@@ -257,7 +257,7 @@ describe('Oracle', function () {
               this.timestamp,
             )
             expect(await this.oracle.reserve()).to.be.bignumber.equal(
-              usdc(1000000),
+              dai(1000000),
             )
           })
         })
@@ -288,7 +288,7 @@ describe('Oracle', function () {
               this.timestamp,
             )
             expect(await this.oracle.reserve()).to.be.bignumber.equal(
-              usdc(1100000),
+              dai(1100000),
             )
           })
         })
@@ -318,7 +318,7 @@ describe('Oracle', function () {
               this.timestamp,
             )
             expect(await this.oracle.reserve()).to.be.bignumber.equal(
-              usdc(1100000),
+              dai(1100000),
             )
           })
         })
@@ -350,7 +350,7 @@ describe('Oracle', function () {
               this.timestamp,
             )
             expect(await this.oracle.reserve()).to.be.bignumber.equal(
-              usdc(1000000),
+              dai(1000000),
             )
           })
         })
@@ -379,7 +379,7 @@ describe('Oracle', function () {
               this.timestamp,
             )
             expect(await this.oracle.reserve()).to.be.bignumber.equal(
-              usdc(1000000),
+              dai(1000000),
             )
           })
         })
@@ -409,7 +409,7 @@ describe('Oracle', function () {
               this.timestamp,
             )
             expect(await this.oracle.reserve()).to.be.bignumber.equal(
-              usdc(1100000),
+              dai(1100000),
             )
           })
         })
@@ -438,7 +438,7 @@ describe('Oracle', function () {
               this.timestamp,
             )
             expect(await this.oracle.reserve()).to.be.bignumber.equal(
-              usdc(1100000),
+              dai(1100000),
             )
           })
         })
@@ -467,7 +467,7 @@ describe('Oracle', function () {
               this.timestamp,
             )
             expect(await this.oracle.reserve()).to.be.bignumber.equal(
-              usdc(1050000),
+              dai(1050000),
             )
           })
         })
@@ -502,7 +502,7 @@ describe('Oracle', function () {
               this.timestamp,
             )
             expect(await this.oracle.reserve()).to.be.bignumber.equal(
-              usdc(1000000),
+              dai(1000000),
             )
           })
         })
@@ -534,7 +534,7 @@ describe('Oracle', function () {
               this.timestamp,
             )
             expect(await this.oracle.reserve()).to.be.bignumber.equal(
-              usdc(1000000),
+              dai(1000000),
             )
           })
         })
@@ -567,7 +567,7 @@ describe('Oracle', function () {
               this.timestamp,
             )
             expect(await this.oracle.reserve()).to.be.bignumber.equal(
-              usdc(1100000),
+              dai(1100000),
             )
           })
         })
@@ -599,7 +599,7 @@ describe('Oracle', function () {
               this.timestamp,
             )
             expect(await this.oracle.reserve()).to.be.bignumber.equal(
-              usdc(1100000),
+              dai(1100000),
             )
           })
         })
@@ -642,7 +642,7 @@ describe('Oracle', function () {
               this.timestamp,
             )
             expect(await this.oracle.reserve()).to.be.bignumber.equal(
-              usdc(1050000),
+              dai(1050000),
             )
           })
         })
@@ -679,9 +679,7 @@ describe('Oracle', function () {
           expect(await this.oracle.timestamp()).to.be.bignumber.equal(
             this.timestamp,
           )
-          expect(await this.oracle.reserve()).to.be.bignumber.equal(
-            usdc(950000),
-          )
+          expect(await this.oracle.reserve()).to.be.bignumber.equal(dai(950000))
         })
       })
     })
@@ -713,7 +711,7 @@ describe('Oracle', function () {
           expect(await this.oracle.timestamp()).to.be.bignumber.equal(
             this.timestamp,
           )
-          expect(await this.oracle.reserve()).to.be.bignumber.equal(usdc(3000))
+          expect(await this.oracle.reserve()).to.be.bignumber.equal(dai(3000))
         })
       })
     })
@@ -745,9 +743,7 @@ describe('Oracle', function () {
           expect(await this.oracle.timestamp()).to.be.bignumber.equal(
             this.timestamp,
           )
-          expect(await this.oracle.reserve()).to.be.bignumber.equal(
-            usdc(300000),
-          )
+          expect(await this.oracle.reserve()).to.be.bignumber.equal(dai(300000))
         })
       })
     })
@@ -778,7 +774,7 @@ describe('Oracle', function () {
           expect(await this.oracle.timestamp()).to.be.bignumber.equal(
             this.timestamp,
           )
-          expect(await this.oracle.reserve()).to.be.bignumber.equal(usdc(3000))
+          expect(await this.oracle.reserve()).to.be.bignumber.equal(dai(3000))
         })
       })
     })

@@ -28,8 +28,8 @@ contract PoolGetters is PoolState {
      * Global
      */
 
-    function usdc() public view returns (address) {
-        return Constants.getUsdcAddress();
+    function dai() public view returns (address) {
+        return Constants.getDaiAddress();
     }
 
     function dao() public view returns (IDAO) {
@@ -95,9 +95,10 @@ contract PoolGetters is PoolState {
         }
 
         uint256 totalRewardedWithPhantom = totalRewarded().add(totalPhantom());
-        uint256 balanceOfRewardedWithPhantom = totalRewardedWithPhantom
-            .mul(balanceOfBonded(account))
-            .div(totalBonded);
+        uint256 balanceOfRewardedWithPhantom =
+            totalRewardedWithPhantom.mul(balanceOfBonded(account)).div(
+                totalBonded
+            );
 
         uint256 balanceOfPhantom = balanceOfPhantom(account);
         if (balanceOfRewardedWithPhantom > balanceOfPhantom) {

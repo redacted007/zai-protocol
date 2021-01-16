@@ -25,8 +25,8 @@ describe('Bonding', function () {
     this.bonding = await MockBonding.new({ from: ownerAddress, gas: 8000000 })
     this.dollar = await Dollar.at(await this.bonding.dollar())
 
-    await this.bonding.setEpochParamsE(await time.latest(), 86400)
-    await time.increase(86400)
+    await this.bonding.setEpochParamsE(await time.latest(), 1800)
+    await time.increase(1800)
     await this.bonding.stepE()
   })
 
@@ -1232,7 +1232,7 @@ describe('Bonding', function () {
     })
   })
 
-  describe.only('when step', function () {
+  describe('when step', function () {
     beforeEach(async function () {
       /* Deposit and Bond User */
       await this.bonding.mintToE(userAddress, 1000)

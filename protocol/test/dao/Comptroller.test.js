@@ -6,7 +6,7 @@ const { expect } = require('chai')
 const MockComptroller = contract.fromArtifact('MockComptroller')
 const Dollar = contract.fromArtifact('Dollar')
 
-const BOOTSTRAPPING_PERIOD = 672
+const BOOTSTRAPPING_PERIOD = 240
 
 describe('Comptroller', function () {
   const [ownerAddress, userAddress, poolAddress, circulating] = accounts
